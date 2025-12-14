@@ -140,7 +140,7 @@ mvn spring-boot:run
 
 2. **Tester l'API Gateway** :
 ```cmd
-curl http://localhost:8080/api/clients
+curl http://localhost:8085/api/clients
 ```
 
 ## 🎨 Étape 4 : Démarrer le frontend Angular
@@ -165,7 +165,7 @@ Le frontend sera accessible sur : **http://localhost:4200**
 | Service | URL | Statut |
 |---------|-----|--------|
 | Eureka Dashboard | http://localhost:8761 | ✅ |
-| API Gateway | http://localhost:8080 | ✅ |
+| API Gateway | http://localhost:8085 | ✅ |
 | Frontend Angular | http://localhost:4200 | ✅ |
 | MySQL | localhost:3306 | ✅ (via Docker) |
 | Kafka | localhost:9092 | ✅ (via Docker) |
@@ -198,17 +198,17 @@ Le frontend sera accessible sur : **http://localhost:4200**
 
 ### Créer un client
 ```cmd
-curl -X POST http://localhost:8080/api/clients -H "Content-Type: application/json" -d "{\"nom\":\"Jean Dupont\",\"email\":\"jean@example.com\",\"telephone\":\"0123456789\",\"adresse\":\"123 Rue Example\"}"
+curl -X POST http://localhost:8085/api/clients -H "Content-Type: application/json" -d "{\"nom\":\"Jean Dupont\",\"email\":\"jean@example.com\",\"telephone\":\"0123456789\",\"adresse\":\"123 Rue Example\"}"
 ```
 
 ### Créer une facture
 ```cmd
-curl -X POST http://localhost:8080/api/factures -H "Content-Type: application/json" -d "{\"clientId\":1,\"montant\":1500.00,\"dateEmission\":\"2024-01-15\",\"dateEcheance\":\"2024-02-15\",\"description\":\"Facture de services\"}"
+curl -X POST http://localhost:8085/api/factures -H "Content-Type: application/json" -d "{\"clientId\":1,\"montant\":1500.00,\"dateEmission\":\"2024-01-15\",\"dateEcheance\":\"2024-02-15\",\"description\":\"Facture de services\"}"
 ```
 
 ### Effectuer un paiement
 ```cmd
-curl -X POST http://localhost:8080/api/paiements -H "Content-Type: application/json" -d "{\"factureId\":1,\"montant\":1500.00,\"methodePaiement\":\"VIREMENT\"}"
+curl -X POST http://localhost:8085/api/paiements -H "Content-Type: application/json" -d "{\"factureId\":1,\"montant\":1500.00,\"methodePaiement\":\"VIREMENT\"}"
 ```
 
 ## 🛑 Arrêter l'application
@@ -244,7 +244,7 @@ $env:PATH += ";C:\Program Files\JetBrains\IntelliJ IDEA 2025.1.1.1\plugins\maven
 
 ### Port déjà utilisé
 ```cmd
-netstat -ano | findstr :8080
+netstat -ano | findstr :8085
 taskkill /PID <PID> /F
 ```
 
@@ -254,7 +254,7 @@ taskkill /PID <PID> /F
 3. Vérifier que le port n'est pas déjà utilisé
 
 ### Frontend ne se connecte pas à l'API
-1. Vérifier que l'API Gateway est démarré : http://localhost:8080
+1. Vérifier que l'API Gateway est démarré : http://localhost:8085
 2. Vérifier les erreurs dans la console du navigateur (F12)
 
 ### MySQL ne démarre pas
@@ -273,7 +273,7 @@ docker-compose restart mysql
 6. ✅ **Facture Service** - Port 8082
 7. ✅ **Paiement Service** - Port 8083
 8. ✅ **Notification Service** - Port 8084
-9. ✅ **API Gateway** - Port 8080
+9. ✅ **API Gateway** - Port 8085
 10. ✅ **Frontend Angular** - Port 4200
 
 ## 🎯 Checklist de démarrage
@@ -285,7 +285,7 @@ docker-compose restart mysql
 - [ ] `mvn clean install` terminé sans erreur
 - [ ] Eureka Dashboard accessible : http://localhost:8761
 - [ ] Tous les services visibles dans Eureka (6 services)
-- [ ] API Gateway répond : http://localhost:8080/api/clients
+- [ ] API Gateway répond : http://localhost:8085/api/clients
 - [ ] Frontend Angular démarré : http://localhost:4200
 - [ ] Test de création d'un client réussi
 - [ ] Test de création d'une facture réussi
@@ -303,4 +303,5 @@ Pour plus de détails, consultez :
 ## 🎉 C'est parti !
 
 Votre application est maintenant prête à être utilisée. Bon développement ! 🚀
+
 

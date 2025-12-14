@@ -37,7 +37,12 @@ public class NotificationService {
             notification.setMessage("Notification de paiement envoyée avec succès");
             notification.setStatut("ENVOYE");
         } catch (Exception e) {
-            notification.setMessage("Erreur lors de l'envoi: " + e.getMessage());
+            // Tronquer le message d'erreur pour éviter de dépasser la limite de la colonne
+            String errorMessage = e.getMessage();
+            if (errorMessage != null && errorMessage.length() > 500) {
+                errorMessage = errorMessage.substring(0, 497) + "...";
+            }
+            notification.setMessage("Erreur lors de l'envoi: " + (errorMessage != null ? errorMessage : e.getClass().getSimpleName()));
             notification.setStatut("ECHEC");
         }
         
@@ -62,7 +67,12 @@ public class NotificationService {
             notification.setMessage("Notification de relance envoyée avec succès");
             notification.setStatut("ENVOYE");
         } catch (Exception e) {
-            notification.setMessage("Erreur lors de l'envoi: " + e.getMessage());
+            // Tronquer le message d'erreur pour éviter de dépasser la limite de la colonne
+            String errorMessage = e.getMessage();
+            if (errorMessage != null && errorMessage.length() > 500) {
+                errorMessage = errorMessage.substring(0, 497) + "...";
+            }
+            notification.setMessage("Erreur lors de l'envoi: " + (errorMessage != null ? errorMessage : e.getClass().getSimpleName()));
             notification.setStatut("ECHEC");
         }
         

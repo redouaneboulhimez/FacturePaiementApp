@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://localhost:8085/api';
 
 export interface Client {
   id?: number;
@@ -116,7 +116,9 @@ export class ApiService {
   }
 
   effectuerPaiement(paiement: { factureId: number; montant: number; methodePaiement: string }): Observable<Paiement> {
-    return this.http.post<Paiement>(`${API_URL}/paiements`, paiement);
+    return this.http.post<Paiement>(`${API_URL}/paiements`, paiement, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   // Notifications

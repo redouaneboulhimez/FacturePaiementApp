@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/notifications")
-@CrossOrigin(origins = "*")
 public class NotificationController {
 
     @Autowired
@@ -23,7 +22,21 @@ public class NotificationController {
 
     @GetMapping("/client/{email}")
     public ResponseEntity<List<Notification>> getNotificationsByClient(@PathVariable String email) {
-        return ResponseEntity.ok(notificationService.getNotificationsByClient(email));
+        // Décoder l'email si nécessaire (les @ et autres caractères spéciaux sont encodés dans l'URL)
+        try {
+            String decodedEmail = java.net.URLDecoder.decode(email, "UTF-8");
+            return ResponseEntity.ok(notificationService.getNotificationsByClient(decodedEmail));
+        } catch (Exception e) {
+            // Si le décodage échoue, utiliser l'email tel quel
+            return ResponseEntity.ok(notificationService.getNotificationsByClient(email));
+        }
+    }
+
+    // Endpoint de secours pour éviter les erreurs 404 (redirection vers l'endpoint correct)
+    @GetMapping("/clients")
+    public ResponseEntity<List<Notification>> getAllNotificationsForClients() {
+        // Retourner toutes les notifications si aucun email n'est spécifié
+        return ResponseEntity.ok(notificationService.getAllNotifications());
     }
 }
 

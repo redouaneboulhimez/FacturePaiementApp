@@ -32,10 +32,10 @@ L'application sera accessible sur http://localhost:4200
 L'URL de l'API est configurée dans `src/app/services/api.service.ts` :
 
 ```typescript
-const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://localhost:8085/api';
 ```
 
-Assurez-vous que l'API Gateway est démarrée sur le port 8080.
+Assurez-vous que l'API Gateway est démarrée sur le port 8085.
 
 ## Fonctionnalités
 

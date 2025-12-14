@@ -32,7 +32,7 @@ Cette application est une plateforme distribuée de gestion de factures et paiem
 
 1. **Eureka Server** (Port 8761) - Service Discovery
 2. **Config Server** (Port 8888) - Configuration centralisée
-3. **API Gateway** (Port 8080) - Point d'entrée unique
+3. **API Gateway** (Port 8085) - Point d'entrée unique
 4. **Client Service** (Port 8081) - Gestion des clients
 5. **Facture Service** (Port 8082) - Gestion des factures + Batch
 6. **Paiement Service** (Port 8083) - Gestion des paiements
@@ -142,7 +142,7 @@ Utiliser les scripts fournis dans le dossier `scripts/`:
 
 ## API Documentation
 
-### Endpoints via API Gateway (http://localhost:8080)
+### Endpoints via API Gateway (http://localhost:8085)
 
 #### Client Service
 
@@ -188,7 +188,7 @@ Voir les fichiers dans le dossier `diagrammes/`:
 
 #### Créer un client
 ```bash
-curl -X POST http://localhost:8080/api/clients \
+curl -X POST http://localhost:8085/api/clients \
   -H "Content-Type: application/json" \
   -d '{
     "nom": "Jean Dupont",
@@ -200,7 +200,7 @@ curl -X POST http://localhost:8080/api/clients \
 
 #### Créer une facture
 ```bash
-curl -X POST http://localhost:8080/api/factures \
+curl -X POST http://localhost:8085/api/factures \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": 1,
@@ -213,7 +213,7 @@ curl -X POST http://localhost:8080/api/factures \
 
 #### Effectuer un paiement
 ```bash
-curl -X POST http://localhost:8080/api/paiements \
+curl -X POST http://localhost:8085/api/paiements \
   -H "Content-Type: application/json" \
   -d '{
     "factureId": 1,

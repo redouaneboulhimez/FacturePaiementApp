@@ -12,11 +12,11 @@ Error: Port XXXX is already in use
 #### Solution
 ```bash
 # Windows
-netstat -ano | findstr :8080
+netstat -ano | findstr :8085
 taskkill /PID <PID> /F
 
 # Linux/Mac
-lsof -ti:8080 | xargs kill -9
+lsof -ti:8085 | xargs kill -9
 ```
 
 #### Vérifier les ports utilisés
@@ -26,7 +26,7 @@ lsof -ti:8080 | xargs kill -9
 - Facture Service: 8082
 - Paiement Service: 8083
 - Notification Service: 8084
-- API Gateway: 8080
+- API Gateway: 8085
 
 ---
 
@@ -293,10 +293,10 @@ Validation failed for object='client'
 
 ```bash
 # Windows
-netstat -ano | findstr :8080
+netstat -ano | findstr :8085
 
 # Linux/Mac
-lsof -i :8080
+lsof -i :8085
 ```
 
 ### Vérifier les logs

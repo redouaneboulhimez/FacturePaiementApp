@@ -29,7 +29,7 @@ import { ApiService, Paiement, Facture } from '../../services/api.service';
           </div>
           <div *ngIf="selectedFacture" class="form-group">
             <label>Montant à payer</label>
-            <input type="number" step="0.01" [(ngModel)]="paiement.montant" name="montant" [value]="selectedFacture.montant" required>
+            <input type="text" [value]="selectedFacture.montant | number:'1.2-2'" readonly class="readonly-input">
             <small>Montant de la facture: {{ selectedFacture.montant | number:'1.2-2' }} €</small>
           </div>
           <div class="form-group">
@@ -73,7 +73,15 @@ import { ApiService, Paiement, Facture } from '../../services/api.service';
       </table>
     </div>
   `,
-  styles: []
+  styles: [`
+    .readonly-input {
+      background-color: #f5f5f5;
+      cursor: not-allowed;
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  `]
 })
 export class PaiementsComponent implements OnInit {
   paiements: Paiement[] = [];
@@ -126,8 +134,7 @@ export class PaiementsComponent implements OnInit {
       this.apiService.getFacture(this.selectedFactureId).subscribe({
         next: (facture) => {
           this.selectedFacture = facture;
-          this.paiement.montant = facture.montant;
-          this.paiement.factureId = facture.id!;
+          // Le montant sera utilisé directement depuis selectedFacture lors de l'envoi
         },
         error: (err) => console.error('Erreur:', err)
       });
@@ -137,9 +144,18 @@ export class PaiementsComponent implements OnInit {
   effectuerPaiement() {
     if (!this.selectedFacture) return;
     
+    // S'assurer que le montant est bien un nombre (conversion explicite pour éviter les problèmes de précision)
+    const montant = Number(this.selectedFacture.montant);
+    
+    // Log pour déboguer
+    console.log('Paiement - Facture ID:', this.selectedFacture.id);
+    console.log('Paiement - Montant envoyé:', montant, 'Type:', typeof montant);
+    console.log('Paiement - Montant facture original:', this.selectedFacture.montant);
+    
+    // Utiliser directement le montant de la facture sélectionnée pour éviter les problèmes de précision
     this.apiService.effectuerPaiement({
-      factureId: this.paiement.factureId,
-      montant: this.paiement.montant,
+      factureId: this.selectedFacture.id!,
+      montant: montant,
       methodePaiement: this.paiement.methodePaiement || 'VIREMENT'
     }).subscribe({
       next: () => {
@@ -149,7 +165,19 @@ export class PaiementsComponent implements OnInit {
         this.loadFacturesEnAttente();
       },
       error: (err) => {
-        const errorMsg = err.error?.error || 'Erreur lors du paiement';
+        console.error('Erreur paiement complète:', err);
+        let errorMsg = 'Erreur lors du paiement';
+        
+        if (err.status === 0) {
+          errorMsg = 'Impossible de se connecter au serveur. Vérifiez que tous les services sont démarrés.';
+        } else if (err.error?.error) {
+          errorMsg = err.error.error;
+        } else if (err.error?.message) {
+          errorMsg = err.error.message;
+        } else if (err.message) {
+          errorMsg = err.message;
+        }
+        
         this.showMessage(errorMsg, 'error');
       }
     });

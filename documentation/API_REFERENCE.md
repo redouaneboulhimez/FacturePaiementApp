@@ -2,7 +2,7 @@
 
 ## Base URL
 
-Toutes les requêtes passent par l'API Gateway: `http://localhost:8080`
+Toutes les requêtes passent par l'API Gateway: `http://localhost:8085`
 
 ## Endpoints
 
@@ -243,7 +243,7 @@ GET /api/notifications/client/{email}
 
 ```bash
 # 1. Créer un client
-CLIENT_ID=$(curl -s -X POST http://localhost:8080/api/clients \
+CLIENT_ID=$(curl -s -X POST http://localhost:8085/api/clients \
   -H "Content-Type: application/json" \
   -d '{
     "nom": "Jean Dupont",
@@ -253,7 +253,7 @@ CLIENT_ID=$(curl -s -X POST http://localhost:8080/api/clients \
   }' | jq -r '.id')
 
 # 2. Créer une facture
-FACTURE_ID=$(curl -s -X POST http://localhost:8080/api/factures \
+FACTURE_ID=$(curl -s -X POST http://localhost:8085/api/factures \
   -H "Content-Type: application/json" \
   -d "{
     \"clientId\": $CLIENT_ID,
@@ -264,7 +264,7 @@ FACTURE_ID=$(curl -s -X POST http://localhost:8080/api/factures \
   }" | jq -r '.id')
 
 # 3. Effectuer un paiement
-curl -X POST http://localhost:8080/api/paiements \
+curl -X POST http://localhost:8085/api/paiements \
   -H "Content-Type: application/json" \
   -d "{
     \"factureId\": $FACTURE_ID,
@@ -273,10 +273,10 @@ curl -X POST http://localhost:8080/api/paiements \
   }"
 
 # 4. Vérifier le statut de la facture
-curl http://localhost:8080/api/factures/$FACTURE_ID
+curl http://localhost:8085/api/factures/$FACTURE_ID
 
 # 5. Vérifier les notifications
-curl http://localhost:8080/api/notifications
+curl http://localhost:8085/api/notifications
 ```
 
 ## Notes importantes

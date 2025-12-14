@@ -161,7 +161,7 @@ mvn spring-boot:run
 
 **Créer un client**
 ```bash
-curl -X POST http://localhost:8080/api/clients \
+curl -X POST http://localhost:8085/api/clients \
   -H "Content-Type: application/json" \
   -d '{
     "nom": "Jean Dupont",
@@ -175,19 +175,19 @@ curl -X POST http://localhost:8080/api/clients \
 
 **Lister les clients**
 ```bash
-curl http://localhost:8080/api/clients
+curl http://localhost:8085/api/clients
 ```
 
 **Obtenir un client**
 ```bash
-curl http://localhost:8080/api/clients/1
+curl http://localhost:8085/api/clients/1
 ```
 
 #### Étape 4.2: Test CRUD Facture
 
 **Créer une facture**
 ```bash
-curl -X POST http://localhost:8080/api/factures \
+curl -X POST http://localhost:8085/api/factures \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": 1,
@@ -200,19 +200,19 @@ curl -X POST http://localhost:8080/api/factures \
 
 **Lister les factures**
 ```bash
-curl http://localhost:8080/api/factures
+curl http://localhost:8085/api/factures
 ```
 
 **Obtenir les factures d'un client**
 ```bash
-curl http://localhost:8080/api/factures/client/1
+curl http://localhost:8085/api/factures/client/1
 ```
 
 #### Étape 4.3: Test Paiement et Notification
 
 **Effectuer un paiement**
 ```bash
-curl -X POST http://localhost:8080/api/paiements \
+curl -X POST http://localhost:8085/api/paiements \
   -H "Content-Type: application/json" \
   -d '{
     "factureId": 1,
@@ -229,20 +229,20 @@ curl -X POST http://localhost:8080/api/paiements \
 
 **Vérifier le statut de la facture**
 ```bash
-curl http://localhost:8080/api/factures/1
+curl http://localhost:8085/api/factures/1
 # Le statut doit être "PAYEE"
 ```
 
 **Vérifier les notifications**
 ```bash
-curl http://localhost:8080/api/notifications
+curl http://localhost:8085/api/notifications
 ```
 
 #### Étape 4.4: Test du Batch de Relance
 
 **Créer une facture impayée avec date d'échéance passée**
 ```bash
-curl -X POST http://localhost:8080/api/factures \
+curl -X POST http://localhost:8085/api/factures \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": 1,

@@ -115,7 +115,7 @@ scripts\start-all.bat   # Windows
 
 # 5. Vérifier
 # Eureka: http://localhost:8761
-# API Gateway: http://localhost:8080
+# API Gateway: http://localhost:8085
 ```
 
 ## ✨ Fonctionnalités implémentées

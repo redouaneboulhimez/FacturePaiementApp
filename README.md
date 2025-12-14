@@ -8,7 +8,7 @@ Cette application suit une architecture microservices avec les composants suivan
 
 - **Eureka Server** - Service Discovery (Port 8761)
 - **Config Server** - Configuration centralisée (Port 8888)
-- **API Gateway** - Point d'entrée unique (Port 8080)
+- **API Gateway** - Point d'entrée unique (Port 8085)
 - **Client Service** - Gestion des clients (Port 8081)
 - **Facture Service** - Gestion des factures + Batch (Port 8082)
 - **Paiement Service** - Gestion des paiements (Port 8083)
@@ -101,7 +101,7 @@ npm start
 
 7. **Vérifier le démarrage**
 - Eureka Dashboard: http://localhost:8761
-- API Gateway: http://localhost:8080
+- API Gateway: http://localhost:8085
 - Frontend Angular: http://localhost:4200
 
 ## 📚 Documentation
@@ -120,7 +120,7 @@ Toute la documentation détaillée se trouve dans le dossier `documentation/`:
 
 ### Créer un client
 ```bash
-curl -X POST http://localhost:8080/api/clients \
+curl -X POST http://localhost:8085/api/clients \
   -H "Content-Type: application/json" \
   -d '{
     "nom": "Jean Dupont",
@@ -132,7 +132,7 @@ curl -X POST http://localhost:8080/api/clients \
 
 ### Créer une facture
 ```bash
-curl -X POST http://localhost:8080/api/factures \
+curl -X POST http://localhost:8085/api/factures \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": 1,
@@ -145,7 +145,7 @@ curl -X POST http://localhost:8080/api/factures \
 
 ### Effectuer un paiement
 ```bash
-curl -X POST http://localhost:8080/api/paiements \
+curl -X POST http://localhost:8085/api/paiements \
   -H "Content-Type: application/json" \
   -d '{
     "factureId": 1,

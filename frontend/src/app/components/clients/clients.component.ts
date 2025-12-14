@@ -96,8 +96,14 @@ export class ClientsComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.showMessage('Erreur lors du chargement des clients', 'error');
+        console.error('Erreur chargement clients:', err);
+        let errorMsg = 'Erreur lors du chargement des clients';
+        if (err.status === 0) {
+          errorMsg = 'Impossible de se connecter au serveur. Vérifiez que l\'API Gateway est démarré.';
+        } else if (err.error?.error) {
+          errorMsg = err.error.error;
+        }
+        this.showMessage(errorMsg, 'error');
         this.loading = false;
       }
     });

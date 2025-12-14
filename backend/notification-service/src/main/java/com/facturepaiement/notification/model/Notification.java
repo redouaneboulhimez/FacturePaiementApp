@@ -10,7 +10,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)  // Peut être null pour les notifications de relance
     private Long paiementId;
 
     @Column(nullable = false)
@@ -31,6 +31,7 @@ public class Notification {
     @Column(nullable = false)
     private String statut = "ENVOYE"; // ENVOYE, ECHEC
 
+    @Column(length = 1000) // Augmenter la taille pour permettre des messages plus longs
     private String message;
 
     public Notification() {}

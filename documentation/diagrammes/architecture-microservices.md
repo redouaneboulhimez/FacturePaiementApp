@@ -12,7 +12,7 @@
                               │
 ┌─────────────────────────────▼──────────────────────────────────┐
 │                    Spring Cloud Gateway                        │
-│                      (Port 8080)                               │
+│                      (Port 8085)                               │
 │  - Routing                                                    │
 │  - Load Balancing                                             │
 │  - Rate Limiting (optionnel)                                  │

@@ -26,3 +26,4 @@ echo.
 echo Note: Ces variables sont definies pour cette session seulement.
 echo Pour les rendre permanentes, ajoutez-les dans les Variables d'environnement Windows.
 
+

@@ -9,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,26 @@ public class PaiementService {
             throw new RuntimeException(errorMsg);
         }
 
-        BigDecimal montantFacture = new BigDecimal(factureMap.get("montant").toString());
+        // Vérifier que la facture n'est pas déjà payée
+        Object statutObj = factureMap.get("statut");
+        if (statutObj != null && "PAYEE".equalsIgnoreCase(statutObj.toString())) {
+            throw new RuntimeException("Cette facture a déjà été payée");
+        }
+
+        // Vérifier que le montant est présent dans la facture
+        Object montantObj = factureMap.get("montant");
+        if (montantObj == null) {
+            throw new RuntimeException("Montant de la facture non disponible");
+        }
+        BigDecimal montantFacture = new BigDecimal(montantObj.toString());
         
-        // Vérifier le montant
-        if (montant.compareTo(montantFacture) != 0) {
-            throw new RuntimeException("Le montant payé ne correspond pas au montant de la facture");
+        // Normaliser et vérifier le montant (pour éviter les problèmes de précision)
+        BigDecimal montantNormalized = montant.setScale(2, RoundingMode.HALF_UP);
+        BigDecimal montantFactureNormalized = montantFacture.setScale(2, RoundingMode.HALF_UP);
+        
+        if (montantNormalized.compareTo(montantFactureNormalized) != 0) {
+            throw new RuntimeException("Le montant payé (" + montantNormalized + 
+                " €) ne correspond pas au montant de la facture (" + montantFactureNormalized + " €)");
         }
 
         // Créer le paiement
@@ -60,7 +76,11 @@ public class PaiementService {
         }
 
         // Récupérer les informations du client (avec Circuit Breaker et Fallback)
-        Long clientId = Long.valueOf(factureMap.get("clientId").toString());
+        Object clientIdObj = factureMap.get("clientId");
+        if (clientIdObj == null) {
+            throw new RuntimeException("Client ID non disponible dans la facture");
+        }
+        Long clientId = Long.valueOf(clientIdObj.toString());
         Map<String, Object> clientMap = clientFeignClient.getClientById(clientId);
         
         String clientEmail = "";
@@ -68,14 +88,19 @@ public class PaiementService {
             clientEmail = clientMap.get("email").toString();
         }
 
-        // Envoyer un message Kafka pour notification
-        Map<String, Object> notificationMessage = new HashMap<>();
-        notificationMessage.put("paiementId", paiement.getId());
-        notificationMessage.put("factureId", factureId);
-        notificationMessage.put("clientEmail", clientEmail);
-        notificationMessage.put("montant", montant.doubleValue());
+        // Envoyer un message Kafka pour notification (avec gestion d'erreur)
+        try {
+            Map<String, Object> notificationMessage = new HashMap<>();
+            notificationMessage.put("paiementId", paiement.getId());
+            notificationMessage.put("factureId", factureId);
+            notificationMessage.put("clientEmail", clientEmail);
+            notificationMessage.put("montant", montant.doubleValue());
 
-        kafkaTemplate.send("paiement-topic", notificationMessage);
+            kafkaTemplate.send("paiement-topic", notificationMessage);
+        } catch (Exception e) {
+            // Log l'erreur mais ne fait pas échouer le paiement si Kafka est indisponible
+            System.err.println("Erreur lors de l'envoi Kafka (paiement enregistré): " + e.getMessage());
+        }
 
         return paiement;
     }

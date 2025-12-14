@@ -7,7 +7,7 @@
 #### 1. Infrastructure
 - ✅ **Eureka Server** (Port 8761) - Service Discovery
 - ✅ **Config Server** (Port 8888) - Configuration centralisée
-- ✅ **API Gateway** (Port 8080) - Point d'entrée unique avec routing
+- ✅ **API Gateway** (Port 8085) - Point d'entrée unique avec routing
 
 #### 2. Microservices Métier
 - ✅ **Client Service** (Port 8081) - CRUD clients complet
@@ -196,7 +196,7 @@ npm start
 ### 3. Accès
 
 - **Eureka Dashboard**: http://localhost:8761
-- **API Gateway**: http://localhost:8080
+- **API Gateway**: http://localhost:8085
 - **Frontend Angular**: http://localhost:4200
 
 ## 🔧 Configuration Resilience4J

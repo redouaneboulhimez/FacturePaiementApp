@@ -51,12 +51,29 @@ export class DashboardComponent implements OnInit {
 
   loadStats() {
     this.loading = true;
+    let clientsLoaded = false;
+    let facturesLoaded = false;
+    
+    const checkComplete = () => {
+      if (clientsLoaded && facturesLoaded) {
+        this.loading = false;
+      }
+    };
     
     this.apiService.getClients().subscribe({
       next: (clients) => {
         this.stats.totalClients = clients.length;
+        clientsLoaded = true;
+        checkComplete();
       },
-      error: (err) => console.error('Erreur chargement clients:', err)
+      error: (err) => {
+        console.error('Erreur chargement clients:', err);
+        if (err.status === 0) {
+          console.error('Impossible de se connecter au serveur. Vérifiez que l\'API Gateway est démarré.');
+        }
+        clientsLoaded = true;
+        checkComplete();
+      }
     });
 
     this.apiService.getFactures().subscribe({
@@ -64,11 +81,16 @@ export class DashboardComponent implements OnInit {
         this.stats.facturesPayees = factures.filter(f => f.statut === 'PAYEE').length;
         this.stats.facturesImpayees = factures.filter(f => f.statut === 'EN_ATTENTE').length;
         this.stats.facturesEnRetard = factures.filter(f => f.statut === 'EN_RETARD').length;
-        this.loading = false;
+        facturesLoaded = true;
+        checkComplete();
       },
       error: (err) => {
         console.error('Erreur chargement factures:', err);
-        this.loading = false;
+        if (err.status === 0) {
+          console.error('Impossible de se connecter au serveur. Vérifiez que l\'API Gateway est démarré.');
+        }
+        facturesLoaded = true;
+        checkComplete();
       }
     });
   }

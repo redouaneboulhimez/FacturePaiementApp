@@ -117,8 +117,14 @@ export class FacturesComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.showMessage('Erreur lors du chargement des factures', 'error');
+        console.error('Erreur chargement factures:', err);
+        let errorMsg = 'Erreur lors du chargement des factures';
+        if (err.status === 0) {
+          errorMsg = 'Impossible de se connecter au serveur. Vérifiez que l\'API Gateway est démarré.';
+        } else if (err.error?.error) {
+          errorMsg = err.error.error;
+        }
+        this.showMessage(errorMsg, 'error');
         this.loading = false;
       }
     });
@@ -141,7 +147,11 @@ export class FacturesComponent implements OnInit {
         this.resetForm();
         this.loadFactures();
       },
-      error: (err) => this.showMessage('Erreur lors de la création', 'error')
+      error: (err) => {
+        console.error('Erreur création facture:', err);
+        const errorMsg = err.error?.message || err.error?.error || err.message || 'Erreur lors de la création';
+        this.showMessage(errorMsg, 'error');
+      }
     });
   }
 
